@@ -8,6 +8,11 @@ image: docker:stable
 services:
   - docker:dind
 
+variables:
+  - DOCKER_USER: $docker_user
+  - DOCKER_PASSWORD: $docker_password
+  - PROJECT_NAME: $docker_user/fellipe-gces-entrega02
+
 build-job:
   stage: build
   script:
