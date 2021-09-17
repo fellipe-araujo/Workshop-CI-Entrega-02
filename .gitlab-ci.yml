@@ -15,3 +15,13 @@ variables:
 
 before_script:
   - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
+
+test-backend:
+  stage: test
+  image: docker/compose:stable
+  before_script:
+    - echo "TESTING BACKEND . . ."
+  script:
+    - docker-compose run --entrypoint "npm run unittest" backend
+  after_script:
+    - echo "BACKEND SUCCESSFULLY TESTED."
