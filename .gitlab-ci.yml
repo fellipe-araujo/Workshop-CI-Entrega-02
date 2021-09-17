@@ -1,7 +1,6 @@
 stages:
   - build
   - test
-  #- deploy
 
 image: docker:stable
 
@@ -35,6 +34,7 @@ test-frontend:
     - echo "TESTING FRONTEND . . ."
   script:
     - docker-compose run --entrypoint "npm run coverage" frontend
+    # publish image on the docker hub
   after_script:
     - echo "FRONTEND SUCCESSFULLY TESTED."
 
@@ -46,6 +46,8 @@ build-backend:
     - echo "BUILDING BACKEND . . ."
   script:
     - docker build -f ./backend/Dockerfile -t $PROJECT_NAME:build-back ./backend
+    # publish image on the docker hub
+    - docker push $PROJECT_NAME:build-back
   after_script:
     - echo "BACKEND SUCCESSFULLY BUILT."
 
@@ -55,5 +57,6 @@ build-frontend:
     - echo "BUILDING FRONTEND . . ."
   script:
     - docker build -f ./frontend/Dockerfile -t $PROJECT_NAME:build-front ./frontend
+    - docker push $PROJECT_NAME:build-front
   after_script:
     - echo "FRONTEND SUCCESSFULLY BUILT."
