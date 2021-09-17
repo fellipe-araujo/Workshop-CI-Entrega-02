@@ -21,7 +21,7 @@ build-backend:
   before_script:
     - echo "BUILDING BACKEND . . ."
   script:
-    - docker build -f ./backend/Dockerfile -t $DOCKER_HUB_USERNAME/gces_backend:build-back ./backend
+    - docker build -f ./backend/Dockerfile -t $DOCKER_HUB_USERNAME/gces_backend:build_back ./backend
     # publish image on the docker hub
     - docker push $DOCKER_HUB_USERNAME/gces_backend:build_back
   after_script:
@@ -34,7 +34,7 @@ build-frontend:
     # Get image from docker hub
     - docker pull fellipearaujo/gces_frontend
   script:
-    - docker build -f ./frontend/Dockerfile -t $DOCKER_HUB_USERNAME/gces_frontend:build-front ./frontend
+    - docker build -f ./frontend/Dockerfile -t $DOCKER_HUB_USERNAME/gces_frontend:build_front ./frontend
     # publish image on the docker hub
     - docker push fellipearaujo/gces_frontend:build_front
   after_script:
