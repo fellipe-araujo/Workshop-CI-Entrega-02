@@ -16,6 +16,8 @@ variables:
 before_script:
   - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USER --password-stdin
 
+# Tests Jobs
+
 test-backend:
   stage: test
   image: docker/compose:stable
@@ -36,11 +38,22 @@ test-frontend:
   after_script:
     - echo "FRONTEND SUCCESSFULLY TESTED."
 
+# Build Jobs
+
 build-backend:
+  stage: build
+  before_script:
+    - echo "BUILDING BACKEND . . ."
+  script:
+    - docker build -f ./backend/Dockerfile -t $PROJECT_NAME:build-back ./backend
+  after_script:
+    - echo "BACKEND SUCCESSFULLY BUILT."
+
+build-frontend:
   stage: build
   before_script:
     - echo "BUILDING FRONTEND . . ."
   script:
-    - docker build -f ./backend/Dockerfile -t $PROJECT_NAME:build-back ./backend
+    - docker build -f ./frontend/Dockerfile -t $PROJECT_NAME:build-front ./frontend
   after_script:
-    - echo "BACKEND SUCCESSFULLY BUILT"
+    - echo "FRONTEND SUCCESSFULLY BUILT."
