@@ -2,13 +2,17 @@ stages:
   - build
   - test
 
-image: docker:latest
+image: docker:stable
 
 services:
   - docker:dind
 
+variables:
+  DOCKER_HUB_USERNAME:  $DOCKER_HUB_USERNAME
+  DOCKER_HUB_PASSWORD:  $DOCKER_HUB_PASSWORD
+
 before_script:
-  - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
+  - echo "$DOCKER_HUB_PASSWORD" | docker login --username $DOCKER_HUB_USERNAME --password-stdin
 
 # Build Jobs
 
@@ -16,12 +20,10 @@ build-backend:
   stage: build
   before_script:
     - echo "BUILDING BACKEND . . ."
-    # Get image from docker hub
-    - docker pull fellipearaujo/gces_backend
   script:
-    - docker build --cache-from fellipearaujo/gces_backend ./backend/
+    - docker build -f ./backend/Dockerfile -t $DOCKER_HUB_USERNAME/gces_backend:build-back ./backend
     # publish image on the docker hub
-    - docker push fellipearaujo/gces_backend
+    - docker push $DOCKER_HUB_USERNAME/gces_backend:build_back
   after_script:
     - echo "BACKEND SUCCESSFULLY BUILT."
 
@@ -32,9 +34,9 @@ build-frontend:
     # Get image from docker hub
     - docker pull fellipearaujo/gces_frontend
   script:
-    - docker build --cache-from fellipearaujo/gces_frontend ./frontend/
+    - docker build -f ./frontend/Dockerfile -t $DOCKER_HUB_USERNAME/gces_frontend:build-front ./frontend
     # publish image on the docker hub
-    - docker push fellipearaujo/gces_frontend
+    - docker push fellipearaujo/gces_frontend:build_front
   after_script:
     - echo "FRONTEND SUCCESSFULLY BUILT."
 
@@ -42,7 +44,7 @@ build-frontend:
 
 test-backend:
   stage: test
-  image: docker/compose:latest
+  image: docker/compose:stable
   before_script:
     - echo "TESTING BACKEND . . ."
   script:
@@ -52,7 +54,7 @@ test-backend:
 
 test-frontend:
   stage: test
-  image: docker/compose:latest
+  image: docker/compose:stable
   before_script:
     - echo "TESTING FRONTEND . . ."
   script:
