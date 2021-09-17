@@ -35,3 +35,12 @@ test-frontend:
     - docker-compose run --entrypoint "npm run coverage" frontend
   after_script:
     - echo "FRONTEND SUCCESSFULLY TESTED."
+
+build-backend:
+  stage: build
+  before_script:
+    - echo "BUILDING FRONTEND . . ."
+  script:
+    - docker build -f ./backend/Dockerfile -t $PROJECT_NAME:build-back ./backend
+  after_script:
+    - echo "BACKEND SUCCESSFULLY BUILT"
