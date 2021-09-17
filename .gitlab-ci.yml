@@ -25,3 +25,13 @@ test-backend:
     - docker-compose run --entrypoint "npm run unittest" backend
   after_script:
     - echo "BACKEND SUCCESSFULLY TESTED."
+
+test-frontend:
+  stage: test
+  image: docker/compose:stable
+  before_script:
+    - echo "TESTING FRONTEND . . ."
+  script:
+    - docker-compose run --entrypoint "npm run coverage" frontend
+  after_script:
+    - echo "FRONTEND SUCCESSFULLY TESTED."
