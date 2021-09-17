@@ -41,6 +41,8 @@ Já para executar cada componente separado, basta seguir o passo-a-passo descrit
 
 ### 1. Integração Contínua (CI)
 
+[![pipeline status](https://gitlab.com/FellipeAraujo/Workshop-CI-Entrega-02/badges/main/pipeline.svg)](https://gitlab.com/FellipeAraujo/Workshop-CI-Entrega-02/-/commits/main)
+
 A aplicação já deverá ter seu ambiente completamente containerizado. Desta forma, cada subsistema (Front-end, Back-end e Banco de Dados) deverá ser isolado em um container individual.
 
 Deverá ser utilizada uma ferramenta de Integração Contínua para garantir o build, os testes e os deploy para o [Docker Hub](https://hub.docker.com) dos serviços principais (chat-app, api-gateway, chat-service e users-service).
