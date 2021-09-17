@@ -20,6 +20,8 @@ build-backend:
   stage: build
   before_script:
     - echo "BUILDING BACKEND . . ."
+    # Get image from docker hub
+    - docker pull fellipearaujo/gces_backend
   script:
     - docker build --cache-from fellipearaujo/gces_backend ./backend
     # publish image on the docker hub
@@ -31,8 +33,11 @@ build-frontend:
   stage: build
   before_script:
     - echo "BUILDING FRONTEND . . ."
+    # Get image from docker hub
+    - docker pull fellipearaujo/gces_frontend
   script:
     - docker build --cache-from fellipearaujo/gces_frontend ./frontend
+    # publish image on the docker hub
     - docker push fellipearaujo/gces_frontend
   after_script:
     - echo "FRONTEND SUCCESSFULLY BUILT."
