@@ -9,12 +9,12 @@ services:
   - docker:dind
 
 variables:
-  - DOCKER_USER: $docker_user
-  - DOCKER_PASSWORD: $docker_password
-  - PROJECT_NAME: $docker_user/fellipe-gces-entrega02
+  - DOCKER_HUB_USER: $DOCKER_HUB_USER
+  - DOCKER_HUB_PASSWORD: $DOCKER_HUB_PASSWORD
+  - PROJECT_NAME: $DOCKER_HUB_USER/fellipe-gces-entrega02
 
 before_script:
-  - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
+  - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USER --password-stdin
 
 test-backend:
   stage: test
