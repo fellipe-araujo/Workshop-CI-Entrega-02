@@ -11,15 +11,13 @@ variables:
   DOCKER_HUB_USERNAME:  $DOCKER_HUB_USERNAME
   DOCKER_HUB_PASSWORD:  $DOCKER_HUB_PASSWORD
 
-before_script:
-  - echo "$DOCKER_HUB_PASSWORD" | docker login --username $DOCKER_HUB_USERNAME --password-stdin
-
 # Build Jobs
 
 build-backend:
   stage: build
   before_script:
     - echo "BUILDING BACKEND . . ."
+    - echo "$DOCKER_HUB_PASSWORD" | docker login --username $DOCKER_HUB_USERNAME --password-stdin
   script:
     - docker build -f ./backend/Dockerfile -t $DOCKER_HUB_USERNAME/gces_backend:build_back ./backend
     # publish image on the docker hub
@@ -31,12 +29,11 @@ build-frontend:
   stage: build
   before_script:
     - echo "BUILDING FRONTEND . . ."
-    # Get image from docker hub
-    - docker pull fellipearaujo/gces_frontend
+    - echo "$DOCKER_HUB_PASSWORD" | docker login --username $DOCKER_HUB_USERNAME --password-stdin
   script:
     - docker build -f ./frontend/Dockerfile -t $DOCKER_HUB_USERNAME/gces_frontend:build_front ./frontend
     # publish image on the docker hub
-    - docker push fellipearaujo/gces_frontend:build_front
+    - docker push $DOCKER_HUB_USERNAME/gces_frontend:build_front
   after_script:
     - echo "FRONTEND SUCCESSFULLY BUILT."
 
