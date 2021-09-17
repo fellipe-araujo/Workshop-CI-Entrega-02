@@ -2,14 +2,10 @@ stages:
   - build
   - test
 
-image: docker:stable
+image: docker:latest
 
 services:
   - docker:dind
-
-variables:
-  DOCKER_HUB_USER: $DOCKER_HUB_USER
-  DOCKER_HUB_PASSWORD: $DOCKER_HUB_PASSWORD
 
 before_script:
   - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
@@ -23,7 +19,7 @@ build-backend:
     # Get image from docker hub
     - docker pull fellipearaujo/gces_backend
   script:
-    - docker build --cache-from fellipearaujo/gces_backend ./backend
+    - docker build --cache-from fellipearaujo/gces_backend ./backend/
     # publish image on the docker hub
     - docker push fellipearaujo/gces_backend
   after_script:
@@ -36,7 +32,7 @@ build-frontend:
     # Get image from docker hub
     - docker pull fellipearaujo/gces_frontend
   script:
-    - docker build --cache-from fellipearaujo/gces_frontend ./frontend
+    - docker build --cache-from fellipearaujo/gces_frontend ./frontend/
     # publish image on the docker hub
     - docker push fellipearaujo/gces_frontend
   after_script:
@@ -46,7 +42,7 @@ build-frontend:
 
 test-backend:
   stage: test
-  image: docker/compose:stable
+  image: docker/compose:latest
   before_script:
     - echo "TESTING BACKEND . . ."
   script:
@@ -56,11 +52,10 @@ test-backend:
 
 test-frontend:
   stage: test
-  image: docker/compose:stable
+  image: docker/compose:latest
   before_script:
     - echo "TESTING FRONTEND . . ."
   script:
     - docker-compose run --entrypoint "npm run coverage" frontend
-    # publish image on the docker hub
   after_script:
     - echo "FRONTEND SUCCESSFULLY TESTED."
