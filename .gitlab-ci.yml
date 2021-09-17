@@ -10,10 +10,32 @@ services:
 variables:
   DOCKER_HUB_USER: $DOCKER_HUB_USER
   DOCKER_HUB_PASSWORD: $DOCKER_HUB_PASSWORD
-  PROJECT_NAME: $DOCKER_HUB_USER/fellipe-gces-entrega02
 
 before_script:
-  - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USER --password-stdin
+  - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
+
+# Build Jobs
+
+build-backend:
+  stage: build
+  before_script:
+    - echo "BUILDING BACKEND . . ."
+  script:
+    - docker build --cache-from fellipearaujo/gces_backend ./backend
+    # publish image on the docker hub
+    - docker push fellipearaujo/gces_backend
+  after_script:
+    - echo "BACKEND SUCCESSFULLY BUILT."
+
+build-frontend:
+  stage: build
+  before_script:
+    - echo "BUILDING FRONTEND . . ."
+  script:
+    - docker build --cache-from fellipearaujo/gces_frontend ./frontend
+    - docker push fellipearaujo/gces_frontend
+  after_script:
+    - echo "FRONTEND SUCCESSFULLY BUILT."
 
 # Tests Jobs
 
@@ -37,26 +59,3 @@ test-frontend:
     # publish image on the docker hub
   after_script:
     - echo "FRONTEND SUCCESSFULLY TESTED."
-
-# Build Jobs
-
-build-backend:
-  stage: build
-  before_script:
-    - echo "BUILDING BACKEND . . ."
-  script:
-    - docker build -f ./backend/Dockerfile -t $PROJECT_NAME:build-back ./backend
-    # publish image on the docker hub
-    - docker push $PROJECT_NAME:build-back
-  after_script:
-    - echo "BACKEND SUCCESSFULLY BUILT."
-
-build-frontend:
-  stage: build
-  before_script:
-    - echo "BUILDING FRONTEND . . ."
-  script:
-    - docker build -f ./frontend/Dockerfile -t $PROJECT_NAME:build-front ./frontend
-    - docker push $PROJECT_NAME:build-front
-  after_script:
-    - echo "FRONTEND SUCCESSFULLY BUILT."
